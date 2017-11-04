@@ -77,6 +77,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 		whoIsIn.setEnabled(false);		// you have to login before being able to Who is in
 		PM = new JButton("PM");
 		PM.addActionListener(this);
+		PM.setEnabled(false);
 		
 		JPanel southPanel = new JPanel();
 		southPanel.add(login);
@@ -189,6 +190,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 			// enable the 2 buttons
 			logout.setEnabled(true);
 			whoIsIn.setEnabled(true);
+			PM.setEnabled(true);
 			// disable the Server and Port JTextField
 			tfServer.setEditable(false);
 			tfPort.setEditable(false);

@@ -99,14 +99,15 @@ public class Server {
 		else
 			sg.appendEvent(time + "\n");
 	}
-
+//Harry Potter ve ölüm yadigarlarý bölüm 2 
+	
 	private synchronized void PM(String username, String message){
 		
 		String _sender;
 		String _receiver;
 		
 		
-		//Hoca dediki usernameler space içermemesini kabul edebilir miþiz.
+		//Hoca dediki usernameler space içermemesini kabul edebilirmiþiz.
 		
 		String[] tokens = message.split(" ");
 		if(tokens.length!=2){
@@ -120,38 +121,32 @@ public class Server {
 		
 		String time = sdf.format(new Date());
 	
-		String messageLf = time + " username + " + username + ": " + message + "\n";
-
+		String messageLf = time + " User " + "\"" + username + "\" send a PM to user \"" + _receiver + "\": " + message + "\n";
+		
+		//Hardcore Debug
+		//System.out.println(messageLf);
+	
+		
 		//For server log
 		if(sg == null)
 			System.out.print(messageLf);
 		else
 			sg.appendRoom(messageLf);     // append in the room window
-
-		
-		//Loop in reverse order in case we would have to remove a Client//Onur Berk Töre : Çokda fifi
-		
-		/*
-		 * Hocanýn verdiði kodda, YOU yazýlmasý istenmiþ,gerekli yeri bulup düzeltmek
-		 * kodu anladýðýnýn bir göstergesidir
-		 */
+					
 		
 		for ( int i = al.size(); --i >= 0 ; ){
-			_sender = username;
 			ClientThread ct = al.get(i);
-			if(ct.username == username){
-				_sender = "You";
-			}
-			messageLf = time + " " + _sender + ": " + message + "\n";
-			
-			
-			
-			
-			if(!ct.writeMsg(messageLf)){
-				al.remove(i);
-				display("Disconnected Client " + ct.username + " removed from list.");
-			}
+			System.out.println("ct.username is  "  + ct.username);
+			System.out.println("receiver username is : " + _receiver);
 
+			if(ct.username.equals(_receiver)){
+				messageLf = time + "!!! "  + username + " send a PM to you "  +  message + "\n";
+				if(!ct.writeMsg(messageLf)){
+					al.remove(i);
+					display("Disconnected Client " + ct.username + " removed from list.");
+				}
+				break;
+			}
 		}
 	}
 		
@@ -302,6 +297,9 @@ public class Server {
 				//Added bu Onur Berk Töre
 				//Personal message coming,we are respect this and not gonna put into sg kayýt
 				case ChatMessage.PM:
+					
+					//My mysterious ways of debugging. 
+					//System.out.println("PM received");
 					PM(username,message);
 					break;
 				}
