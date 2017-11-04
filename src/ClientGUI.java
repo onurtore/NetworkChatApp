@@ -15,6 +15,9 @@ public class ClientGUI extends JFrame implements ActionListener {
 	private JTextField tf;
 	// to hold the server address an the port number
 	private JTextField tfServer, tfPort;
+	//Onur Berk Töre
+	//Add nickname field
+	private JTextField _nickName;
 	// to Logout and get the list of the users
 	private JButton login, logout, whoIsIn,PM;
 	// for the chat room
@@ -42,25 +45,42 @@ public class ClientGUI extends JFrame implements ActionListener {
 		tfServer = new JTextField(host);
 		tfPort = new JTextField("" + port);
 		tfPort.setHorizontalAlignment(SwingConstants.RIGHT);
+		_nickName =  new JTextField("" );
+		_nickName.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		serverAndPort.add(new JLabel("Server Address:  "));
 		serverAndPort.add(tfServer);
+		
 		serverAndPort.add(new JLabel("Port Number:  "));
 		serverAndPort.add(tfPort);
+		
+		serverAndPort.add(new JLabel("NickName: "));
+		serverAndPort.add(_nickName);
+		
 		serverAndPort.add(new JLabel(""));
+		
 		// adds the Server an port field to the GUI
 		northPanel.add(serverAndPort);
 
 		// the Label and the TextField
 		label = new JLabel("Enter your username below", SwingConstants.CENTER);
 		northPanel.add(label);
-		tf = new JTextField("Anonymous");
+		tf = new JTextField("Message");
 		tf.setBackground(Color.WHITE);
 		northPanel.add(tf);
 		add(northPanel, BorderLayout.NORTH);
 
 		// The CenterPanel which is the chat room
-		ta = new JTextArea("Welcome to the Chat room\n", 80, 80);
+		String howTo = "Welcome to the Chat room\n\n"+
+						"Please choose your nickname,default will be Anonymous\n"+
+						"Press Login to connect to server\n"+
+						"Press Logout to disconnect from server\n"+
+						"Press Who is in for seeing online users\n\n"+
+						"How to use PM\n"+
+						"[userName that you want to send this message]+[space]+[message] and press PM button"+
+						"\n\nHave Fun\n";
+		
+		ta = new JTextArea(howTo, 80, 80);
 		JPanel centerPanel = new JPanel(new GridLayout(1,1));
 		centerPanel.add(new JScrollPane(ta));
 		ta.setEditable(false);
@@ -125,6 +145,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 		Object o = e.getSource();
 		// if it is the Logout button
 		if(o == logout) {
+			_nickName.setEditable(true);
 			client.SendMessage(new ChatMessage(ChatMessage.LOGOUT, ""));
 			return;
 		}
@@ -156,7 +177,8 @@ public class ClientGUI extends JFrame implements ActionListener {
 
 		if(o == login) {
 			// ok it is a connection request
-			String username = tf.getText().trim();
+			String username = _nickName.getText().trim();
+			_nickName.setEditable(false);
 			// empty username ignore it
 			if(username.length() == 0)
 				return;

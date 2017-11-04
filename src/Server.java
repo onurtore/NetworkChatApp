@@ -19,6 +19,7 @@ public class Server {
 	// if I am in a GUI
 	private ServerGUI sg;
 
+	Timer timer;
 	
 	//The boolen that will be turned of to stop the server
 	private boolean keepGoing;
@@ -42,7 +43,8 @@ public class Server {
 	public void start(){
 		
 		keepGoing = true;
-		
+		timer = new Timer(true);
+		timer.schedule(new TimeMessages(),0,30000);
 		try{
 			ServerSocket serverSocket = new ServerSocket(port);
 			
@@ -351,6 +353,23 @@ public class Server {
 		}
 		
 	}
+	
+	class TimeMessages extends TimerTask {
 
+		@Override
+		public void run() {
+			String msg = "Currently connected users:\n";
+			for(int j= 0; j < al.size(); j++){
+				msg += "-";
+				ClientThread ct = al.get(j);
+				msg += ct.username;
+			}
+			msg +="\n";
+			for(int j= 0; j < al.size(); j++){
+				ClientThread ct = al.get(j);
+				ct.writeMsg(msg);
+			}
+		}
+	}
 }
 

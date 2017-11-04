@@ -3,6 +3,5 @@ Chat application for Network Class
 
 Features must be added : 
 
-Client must see his name as 'YOU'.
-Personal message support.
+Additional Features : 
 Remove specific word.
