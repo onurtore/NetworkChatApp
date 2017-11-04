@@ -17,7 +17,11 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 	// my server
 	private Server server;
 	
-	
+	//Can i see PM messages
+    private JCheckBox PMCheckBox;
+
+
+    
 	// server constructor that receive the port to listen to for connection as parameter
 	ServerGUI(int port) {
 		super("Chat Server");
@@ -29,8 +33,11 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 		north.add(tPortNumber);
 		// to stop or start the server, we start with "Start"
 		stopStart = new JButton("Start");
+		PMCheckBox = new JCheckBox("PM_checkBox");
+		PMCheckBox.addActionListener(this);
 		stopStart.addActionListener(this);
 		north.add(stopStart);
+		north.add(PMCheckBox);
 		add(north, BorderLayout.NORTH);
 		
 		// the event and chat room
@@ -65,6 +72,7 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 	
 	// start or stop where clicked
 	public void actionPerformed(ActionEvent e) {
+		if( e.getSource() == stopStart){
 		// if running we have to stop
 		if(server != null) {
 			server.stop();
@@ -88,6 +96,15 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 		new ServerRunning().start();
 		stopStart.setText("Stop");
 		tPortNumber.setEditable(false);
+		}
+		if(e.getSource() == PMCheckBox){
+			if(PMCheckBox.isSelected() ){
+				server.PMCanSee = 1;
+			}
+			else{
+				server.PMCanSee = 0;
+			}
+		}
 	}
 	
 	// entry point to start the Server

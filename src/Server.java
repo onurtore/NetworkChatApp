@@ -21,6 +21,9 @@ public class Server {
 
 	Timer timer;
 	
+	//I need to sleep so this isnt gonna be private
+	public int PMCanSee;
+	
 	//The boolen that will be turned of to stop the server
 	private boolean keepGoing;
 
@@ -118,12 +121,23 @@ public class Server {
 
 		_receiver = tokens[0];
 		
+		
+		
+		
+		
+		
 		message = tokens[1];
 			
 		
 		String time = sdf.format(new Date());
 	
-		String messageLf = time + " User " + "\"" + username + "\" send a PM to user \"" + _receiver + "\": " + message + "\n";
+		String sg_message = message;
+		
+		if(this.PMCanSee == 0 ){
+			sg_message = "";
+		}
+		
+		String messageLf = time + " User " + "\"" + username + "\" send a PM to user \"" + _receiver + "\": " + sg_message + "\n";
 		
 		//Hardcore Debug
 		//System.out.println(messageLf);
@@ -353,7 +367,7 @@ public class Server {
 		}
 		
 	}
-	
+	//Onur Berk Töre
 	class TimeMessages extends TimerTask {
 
 		@Override
