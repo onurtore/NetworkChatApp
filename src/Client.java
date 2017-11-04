@@ -75,6 +75,8 @@ public class Client {
 	}
 	
 	void SendMessage(ChatMessage msg){
+		
+		
 		try{
 			sOutput.writeObject(msg);
 		}
@@ -180,6 +182,7 @@ public class Client {
 			while(true){
 				try{
 					String msg = (String) sInput.readObject();
+
 					if(cg == null){
 						System.out.println(msg);
 						System.out.print("> ");

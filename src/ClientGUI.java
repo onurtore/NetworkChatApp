@@ -16,7 +16,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 	// to hold the server address an the port number
 	private JTextField tfServer, tfPort;
 	// to Logout and get the list of the users
-	private JButton login, logout, whoIsIn;
+	private JButton login, logout, whoIsIn,PM;
 	// for the chat room
 	private JTextArea ta;
 	// if it is for connection
@@ -75,11 +75,14 @@ public class ClientGUI extends JFrame implements ActionListener {
 		whoIsIn = new JButton("Who is in");
 		whoIsIn.addActionListener(this);
 		whoIsIn.setEnabled(false);		// you have to login before being able to Who is in
-
+		PM = new JButton("PM");
+		PM.addActionListener(this);
+		
 		JPanel southPanel = new JPanel();
 		southPanel.add(login);
 		southPanel.add(logout);
 		southPanel.add(whoIsIn);
+		southPanel.add(PM);
 		add(southPanel, BorderLayout.SOUTH);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -99,6 +102,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 	void connectionFailed() {
 		login.setEnabled(true);
 		logout.setEnabled(false);
+		PM.setEnabled(false);
 		whoIsIn.setEnabled(false);
 		label.setText("Enter your username below");
 		tf.setText("Anonymous");
@@ -128,7 +132,18 @@ public class ClientGUI extends JFrame implements ActionListener {
 			client.SendMessage(new ChatMessage(ChatMessage.WHOISON, ""));				
 			return;
 		}
-
+		//Added by Onur Berk Töre
+		//Personal message
+		/*
+		 * Yo some nigggas do some personal stuff
+		 * 
+		 */
+		if(o == PM){
+			client.SendMessage(new ChatMessage(ChatMessage.PM, tf.getText()));				
+			tf.setText("");
+			return;		
+		}
+		
 		// ok it is coming from the JTextField
 		if(connected) {
 			// just have to send the message

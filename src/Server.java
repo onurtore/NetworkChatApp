@@ -47,6 +47,7 @@ public class Server {
 			ServerSocket serverSocket = new ServerSocket(port);
 			
 			while(keepGoing){
+				//Her saniye print yapmýyor.
 				display("Server waiting for Clients on port " + port + ".");
 				
 				Socket socket = serverSocket.accept();
@@ -99,24 +100,97 @@ public class Server {
 			sg.appendEvent(time + "\n");
 	}
 
-	
-	private synchronized void broadcast(String message){
+	private synchronized void PM(String username, String message){
+		
+		String _sender;
+		String _receiver;
+		
+		
+		//Hoca dediki usernameler space içermemesini kabul edebilir miþiz.
+		
+		String[] tokens = message.split(" ");
+		if(tokens.length!=2){
+			throw new IllegalArgumentException();
+		}
+
+		_receiver = tokens[0];
+		
+		message = tokens[1];
+			
 		
 		String time = sdf.format(new Date());
-		String messageLf = time + " " + message + "\n";
+	
+		String messageLf = time + " username + " + username + ": " + message + "\n";
+
+		//For server log
 		if(sg == null)
 			System.out.print(messageLf);
 		else
 			sg.appendRoom(messageLf);     // append in the room window
-		;
+
 		
 		//Loop in reverse order in case we would have to remove a Client//Onur Berk Töre : Çokda fifi
+		
+		/*
+		 * Hocanýn verdiði kodda, YOU yazýlmasý istenmiþ,gerekli yeri bulup düzeltmek
+		 * kodu anladýðýnýn bir göstergesidir
+		 */
+		
 		for ( int i = al.size(); --i >= 0 ; ){
+			_sender = username;
 			ClientThread ct = al.get(i);
+			if(ct.username == username){
+				_sender = "You";
+			}
+			messageLf = time + " " + _sender + ": " + message + "\n";
+			
+			
+			
+			
 			if(!ct.writeMsg(messageLf)){
 				al.remove(i);
 				display("Disconnected Client " + ct.username + " removed from list.");
 			}
+
+		}
+	}
+		
+	private synchronized void broadcast(String username, String message){
+		
+		String _sender;
+		String time = sdf.format(new Date());
+		String messageLf = time + " " + username + ": " + message + "\n";
+
+		//For server log
+		if(sg == null)
+			System.out.print(messageLf);
+		else
+			sg.appendRoom(messageLf);     // append in the room window
+
+		
+		//Loop in reverse order in case we would have to remove a Client//Onur Berk Töre : Çokda fifi
+		
+		/*
+		 * Hocanýn verdiði kodda, YOU yazýlmasý istenmiþ,gerekli yeri bulup düzeltmek
+		 * kodu anladýðýnýn bir göstergesidir
+		 */
+		
+		for ( int i = al.size(); --i >= 0 ; ){
+			_sender = username;
+			ClientThread ct = al.get(i);
+			if(ct.username == username){
+				_sender = "You";
+			}
+			messageLf = time + " " + _sender + ": " + message + "\n";
+			
+			
+			
+			
+			if(!ct.writeMsg(messageLf)){
+				al.remove(i);
+				display("Disconnected Client " + ct.username + " removed from list.");
+			}
+
 		}
 	}
 	
@@ -165,7 +239,7 @@ public class Server {
 				sInput  = new ObjectInputStream(socket.getInputStream());
 				
 				username = (String) sInput.readObject();
-				display(username + "just connected");
+				display(username + " just connected");
 			}
 			
 			catch(IOException e){
@@ -193,10 +267,16 @@ public class Server {
 				}
 				
 				String message = cm.getMessage();
+				
+				
+				//This part is addition of me, i dont want to mix it with the original variables
+				String _sender;
+				
 				switch(cm.getType()){
 					
 				case ChatMessage.MESSAGE:
-					broadcast(username + ": " + message);
+					
+					broadcast(username, message);
 					break;
 				case ChatMessage.LOGOUT:
 					display(username + " disconnected with a  LOGOUT message.");
@@ -205,10 +285,24 @@ public class Server {
 				case ChatMessage.WHOISON:
 					writeMsg("List  of the users connected at " + sdf.format(new Date()) + "\n");
 					
+					
 					for(int i = 0; i < al.size(); i++){
 						ClientThread ct = al.get(i);
-						writeMsg((i+1) + ") " + ct.username + " since " + ct.date);
+						if(ct.username == username){
+							_sender = "You";
+						}
+						else{
+							_sender = ct.username;
+						}
+						
+						writeMsg((i+1) + ") " +"\""+  _sender +"\"" + " since " + ct.date);
  					}
+					break;
+					
+				//Added bu Onur Berk Töre
+				//Personal message coming,we are respect this and not gonna put into sg kayýt
+				case ChatMessage.PM:
+					PM(username,message);
 					break;
 				}
 			}

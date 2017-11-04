@@ -39,11 +39,14 @@ public class ChatMessage implements Serializable {
 	//MESSAGE an ordinary message
 	//LOGOUT to disconnected from the server
 	
-	static final int WHOISON = 0,MESSAGE = 1,LOGOUT = 2;
-	
+	static final int WHOISON = 0,MESSAGE = 1,LOGOUT = 2,PM = 3;
+
 	private int type;
 	
 	private String message;
+	
+		
+	private String Receiver;
 	
 	ChatMessage(int type,String message){
 		this.type = type;
@@ -57,5 +60,10 @@ public class ChatMessage implements Serializable {
 	
 	String getMessage(){
 		return message;
+	}
+	
+	
+	String getReceiver(){
+		return Receiver;
 	}
 }
