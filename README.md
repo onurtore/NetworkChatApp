@@ -1,7 +1,5 @@
 # NetworkChatApp
-Chat application for Network Class
+Chat application for Network Course
 
-Features must be added : 
+This was not a term project,this was one of the assignment, so the code not gonna be perfect. 
 
-Additional Features : 
-Remove specific word.

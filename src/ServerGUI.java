@@ -35,6 +35,7 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 		stopStart = new JButton("Start");
 		PMCheckBox = new JCheckBox("PM_checkBox");
 		PMCheckBox.addActionListener(this);
+		PMCheckBox.setEnabled(false);
 		stopStart.addActionListener(this);
 		north.add(stopStart);
 		north.add(PMCheckBox);
@@ -79,6 +80,7 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 			server = null;
 			tPortNumber.setEditable(true);
 			stopStart.setText("Start");
+			this.PMCheckBox.setEnabled(false);
 			return;
 		}
       	// OK start the server	
@@ -96,6 +98,7 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 		new ServerRunning().start();
 		stopStart.setText("Stop");
 		tPortNumber.setEditable(false);
+		this.PMCheckBox.setEnabled(true);
 		}
 		if(e.getSource() == PMCheckBox){
 			if(PMCheckBox.isSelected() ){
@@ -147,6 +150,7 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 			server.start();         // should execute until if fails
 			// the server failed
 			stopStart.setText("Start");
+			
 			tPortNumber.setEditable(true);
 			appendEvent("Server crashed\n");
 			server = null;

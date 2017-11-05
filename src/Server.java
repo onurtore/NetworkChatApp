@@ -116,9 +116,22 @@ public class Server {
 		
 		String[] tokens = message.split(" ");
 		if(tokens.length!=2){
-			throw new IllegalArgumentException();
-		}
+			for ( int i = al.size(); --i >= 0 ; ){
+				ClientThread ct = al.get(i);
 
+				if(ct.username.equals(username)){
+					String messageLf = "PM Format is invalid";
+					if(!ct.writeMsg(messageLf)){
+						al.remove(i);
+						display("Disconnected Client " + ct.username + " removed from list.");
+					}
+					break;
+				}
+		
+			}
+			return;
+		}
+		
 		_receiver = tokens[0];
 		
 		
