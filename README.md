@@ -1,5 +1,4 @@
 # NetworkChatApp
-Chat application for Network Course
+Chat application for Network course
 
-This was not a term project,this was one of the assignment, so the code not gonna be perfect. 
-
+This was one of the assignment, so code is not perfect
